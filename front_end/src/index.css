@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+.form-container {
+  @apply max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg;
+}
+
+ 
+label {
+  @apply block text-lg font-semibold text-gray-700;
+}
+
+ 
+select,
+textarea
+ {
+  @apply mt-2 p-2 w-full border border-gray-300 rounded-md;
+}
+
+ 
+button {
+  @apply mt-4 p-2 w-full bg-blue-500 text-white rounded-md hover:bg-blue-600;
+}
+
+.form-header{
+  @apply text-4xl text-center font-bold pt-4 pb-8
+}
+
+.bg{
+  @apply pt-5 
+}
+
+.Table{
+ @apply pl-50 pt-10
+}
+
+.error{
+  @apply text-[15px] text-red-500 font-medium
+}
+
+.loginbutton{
+  @apply bg-blue-500 w-full py-2 my-4 text-white hover:bg-blue-800 hover:text-white font-bold rounded-xl shadow
+}
+
+.logininput {
+  @apply mt-2 p-2 w-full shadow-md
+}
+
+.input {
+  @apply mt-2 p-2 w-[300px] shadow-md ml-[200px] rounded-md bg-gray-200
+}
