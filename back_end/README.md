@@ -1,5 +1,4 @@
-# Backend - Ballerina API
-
+# Employee-Feedback-Management-System-Backend
 ## 📌 Project Overview
 This is the backend of the application built using **Ballerina**.
 
@@ -17,12 +16,7 @@ git clone https://github.com/Sahasra0108/Employee-Feedback-Management-System.git
 ```bash
 cd Employee-Feedback-Management-System/back_end
 ```
-3. Build and run the Ballerina service
-```bash
-bal build
-bal run
-```
-Open the relevant Ballerina file (e.g., `service.bal`) and update:
+3.Update the **database connection settings**.
 ```ballerina
 mysql:Client feedback = check new ("localhost",
     user = "your-username",
@@ -30,4 +24,12 @@ mysql:Client feedback = check new ("localhost",
     database = "teamlead_feedback",
     port = 3306
 );
+```
+4.Build and run the Ballerina service
+```bash
+bal build
+bal run
+```
+ 
+
  
