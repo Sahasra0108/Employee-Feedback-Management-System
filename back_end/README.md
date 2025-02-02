@@ -5,7 +5,7 @@ This is the backend of the application built using **Ballerina**.
 ## 🔧 Installation & Setup
 
 ### Prerequisites
-**[Ballerina](https://ballerina.io/downloads/)** (latest version)
+- **[Ballerina](https://ballerina.io/downloads/)** (latest version)
 - **MySQL** (or any compatible database)
 
 1.Clone the repository
