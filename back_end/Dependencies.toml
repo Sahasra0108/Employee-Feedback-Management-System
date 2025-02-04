@@ -37,6 +37,9 @@ version = "1.5.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
+modules = [
+	{org = "ballerina", packageName = "constraint", moduleName = "constraint"}
+]
 
 [[package]]
 org = "ballerina"
@@ -238,6 +241,14 @@ dependencies = [
 
 [[package]]
 org = "ballerina"
+name = "openapi"
+version = "2.1.1"
+modules = [
+	{org = "ballerina", packageName = "openapi", moduleName = "openapi"}
+]
+
+[[package]]
+org = "ballerina"
 name = "os"
 version = "1.8.0"
 dependencies = [
@@ -327,7 +338,9 @@ org = "sahasra"
 name = "feedback"
 version = "0.1.0"
 dependencies = [
+	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "openapi"},
 	{org = "ballerina", name = "sql"},
 	{org = "ballerina", name = "time"},
 	{org = "ballerinai", name = "observe"},

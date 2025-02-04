@@ -1,4 +1,6 @@
+import ballerina/constraint;
 import ballerina/http;
+import ballerina/openapi;
 import ballerina/sql;
 import ballerina/time;
 import ballerinax/mysql;
@@ -47,8 +49,30 @@ type UserNotFound record {|
 
 type NewFeedback record {
     string employeeName;
+    @constraint:String {
+        minLength: {
+            value: 1,
+            message: "Team lead name is required."
+        }
+
+        }
+
     string teamLead;
+
+    @constraint:String {
+        minLength: {
+            value: 1,
+            message: "Feedback is required."
+        }
+    }
     string feedback;
+
+    @constraint:Float {
+        minValue: {
+            value: 0.5,
+            message: "Rating is required."
+        }
+   }
     float rating;
 
 };
@@ -72,6 +96,40 @@ mysql:Client feedback = check new ("localhost",
 }
 
 service /feedback on new http:Listener(9090) {
+
+    @openapi:ResourceInfo {
+        operationId: "retriveAllFeedbacks",
+        summary: "API for retrive all feedbacks in the database",
+        tags: ["feedbacks"],
+        examples: {
+            "response": {
+                "200": {
+                    "examples": {
+                        "application/json": {
+                            "feedback01": {
+                                "value": {
+                                    "id": 1,
+                                    "employeeName": "sachini",
+                                    "teamLead": "Pathum Perera",
+                                    "feedback": "fef",
+                                    "rating": 2.5,
+                                    "submittedDate": {
+                                        "year": 2025,
+                                        "month": 2,
+                                        "day": 1
+                                    }
+
+                                }
+                            }
+                        }
+
+                    }
+                
+                }
+
+            }
+        }
+    }
 
     resource function get feedbacks() returns FeedBack[]|error? {
         stream<FeedBack, sql:Error?> feedbackStream = feedback->query(`SELECT * FROM feedback`);
