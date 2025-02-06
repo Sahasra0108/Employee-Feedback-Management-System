@@ -72,7 +72,7 @@ type NewFeedback record {
             value: 0.5,
             message: "Rating is required."
         }
-   }
+    }
     float rating;
 
 };
@@ -131,17 +131,106 @@ service /feedback on new http:Listener(9090) {
         }
     }
 
-    resource function get feedbacks() returns FeedBack[]|error? {
+    resource function get feedbacks() returns FeedBack[]|ErrorDetails|error {
         stream<FeedBack, sql:Error?> feedbackStream = feedback->query(`SELECT * FROM feedback`);
+
         return from FeedBack feedback in feedbackStream
             select feedback;
+    }
+
+    @openapi:ResourceInfo {
+        operationId: "retriveAllFeedbacks",
+        summary: "API for retrive all feedbacks in the database",
+        tags: ["feedbacks"],
+        examples: {
+            "response": {
+                "200": {
+                    "examples": {
+                        "application/json": {
+                            "feedback01": {
+                                "value": {
+                                    "id": 1,
+                                    "name": "Pathum Perera"
+                                
+                                }
+                            }
+
+                        }
+                    
+                    }
+
+                }
+            }
+        }
     }
 
     resource function get teamLeads() returns TeamLead[]|error? {
         return teamleads.toArray();
     }
 
-    resource function post submitFeedback(NewFeedback newFeedback, http:Request req) returns http:Created|error {
+    @openapi:ResourceInfo {
+         
+        operationId: "submitFeedbacks",
+        summary: "API for retrive submit feedbacks to the database",
+        tags: ["feedbacks"],
+        
+        examples: {
+            "requestBody": {
+                "application/json": {
+                    "validFeedback": {
+                        "value": {
+                            "employeeName": "Nimesh Perera",
+                            "teamLead": "Pathum Perera",
+                            "feedback": "Great support and guidance throughout the project.",
+                            "rating": 5
+                        }
+                    },
+                    "invalidFeedback": {
+                        "value": {
+                            "employeeName": "Janith Silva",
+                            "teamLead": "",
+                            "feedback": "Needs improvement in communication.",
+                            "rating": 3
+                        }
+                    }
+                }
+            },
+    
+        
+            "response": {
+                "201": {
+                    "examples": {
+                        "application/json": {
+                            "message": {
+                                "value": {
+                                    "message": "Feedback submitted successfully."
+                                
+                                }
+                            }
+
+                        }
+
+                    }
+                },
+                "400": {
+                    "examples": {
+                        "application/json": {
+                            "message": {
+                                "value": {
+                                    "error": "Employee name is required."
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        
+    }
+
+    resource function post submitFeedback(NewFeedback newFeedback, http:Request req) returns http:Created|http:BadRequest|error {
+        
         _ = check feedback->execute(`
         INSERT INTO feedback(employee_name,team_lead,feedback,rating,submitted_date) 
         VALUES (${newFeedback.employeeName},${newFeedback.teamLead},${newFeedback.feedback},${newFeedback.rating},CURRENT_DATE);`
