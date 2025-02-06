@@ -168,66 +168,7 @@ service /feedback on new http:Listener(9090) {
         return teamleads.toArray();
     }
 
-    @openapi:ResourceInfo {
-         
-        operationId: "submitFeedbacks",
-        summary: "API for retrive submit feedbacks to the database",
-        tags: ["feedbacks"],
-        
-        examples: {
-            "requestBody": {
-                "application/json": {
-                    "validFeedback": {
-                        "value": {
-                            "employeeName": "Nimesh Perera",
-                            "teamLead": "Pathum Perera",
-                            "feedback": "Great support and guidance throughout the project.",
-                            "rating": 5
-                        }
-                    },
-                    "invalidFeedback": {
-                        "value": {
-                            "employeeName": "Janith Silva",
-                            "teamLead": "",
-                            "feedback": "Needs improvement in communication.",
-                            "rating": 3
-                        }
-                    }
-                }
-            },
     
-        
-            "response": {
-                "201": {
-                    "examples": {
-                        "application/json": {
-                            "message": {
-                                "value": {
-                                    "message": "Feedback submitted successfully."
-                                
-                                }
-                            }
-
-                        }
-
-                    }
-                },
-                "400": {
-                    "examples": {
-                        "application/json": {
-                            "message": {
-                                "value": {
-                                    "error": "Employee name is required."
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
-        
-    }
 
     resource function post submitFeedback(NewFeedback newFeedback, http:Request req) returns http:Created|http:BadRequest|error {
         
