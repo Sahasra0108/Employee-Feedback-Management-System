@@ -168,15 +168,66 @@ service /feedback on new http:Listener(9090) {
         return teamleads.toArray();
     }
 
+    @openapi:ResourceInfo {
+        operationId: "submitFeedbacks",
+        summary: "API for submit feedbacks to the database",
+        tags: ["feedbacks"],
+        examples: {
+            "requestBody": {
+                "application/json": {
+                    "validFeedback": {
+                        "value": {
+                            "employeeName": "Nimesh Perera",
+                            "teamLead": "Pathum Perera",
+                            "feedback": "Great support and guidance throughout the project.",
+                            "rating": 5
+                        }
+                    },
+                    "invalidFeedback": {
+                        "value": {
+                            "employeeName": "Janith Silva",
+                            "teamLead": "",
+                            "feedback": "Needs improvement in communication.",
+                            "rating": 3
+                        }
+                    }
+                }
+            
+            }
+
+         }
     
-
-    resource function post submitFeedback(NewFeedback newFeedback, http:Request req) returns http:Created|http:BadRequest|error {
-        
-        _ = check feedback->execute(`
-        INSERT INTO feedback(employee_name,team_lead,feedback,rating,submitted_date) 
-        VALUES (${newFeedback.employeeName},${newFeedback.teamLead},${newFeedback.feedback},${newFeedback.rating},CURRENT_DATE);`
-        );
-        return http:CREATED;
-
     }
+
+    resource function post submitFeedback(NewFeedback newFeedback, http:Request req)
+    returns http:Response|error {
+        do {
+
+            _ = check feedback->execute(`
+        INSERT INTO feedback(employee_name, team_lead, feedback, rating, submitted_date) 
+        VALUES (${newFeedback.employeeName}, ${newFeedback.teamLead}, ${newFeedback.feedback}, ${newFeedback.rating}, CURRENT_DATE);
+    `);
+        }
+        on fail var err {
+
+            ErrorDetails errorDetails = {
+                message: "An internal server error occurred.",
+                details: err.message(),
+                timeStamp: time:utcNow()
+            };
+
+            json errorDetailsJson = errorDetails.toJson();
+
+            http:Response response = new;
+            response.statusCode = 500;
+            response.setJsonPayload(errorDetailsJson);
+            return response;
+        }
+
+        http:Response response = new;
+        response.statusCode = 201;
+        response.setTextPayload("Feedback submitted successfully!");
+        return response;
+    }
+
 }

@@ -5,7 +5,7 @@ const Sidebar = () => {
   return (
     <div className="w-64 h-screen bg-blue-900 text-white fixed left-0 top-0 p-5">
       
-      <h2 className="text-xl font-bold mb-6">Dashboard</h2>
+       
 
        
       <ul>
