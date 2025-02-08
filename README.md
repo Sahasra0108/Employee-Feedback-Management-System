@@ -1,10 +1,11 @@
-# Employee Feedback Management System
+![Untitled design (4)](https://github.com/user-attachments/assets/a7290791-9588-4d33-a64e-04fc831a62a9)# Employee Feedback Management System
 
 ## 📌 Overview
 The **Employee Feedback Management System** is a web application that allows employees to submit feedback about their team leads. It enables submission, and management of feedback within an organization.
 
 ##  Screenshots 📸
-![githubimage](https://github.com/user-attachments/assets/8e82e5b0-a605-4ffd-a616-c8083668320e)
+ ![screen_shots](https://github.com/user-attachments/assets/b7b5b81c-b004-4516-9009-0a5eb87def08)
+
 
 ## 🚀 Features
 - Submit feedback with ratings
