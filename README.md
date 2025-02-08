@@ -3,6 +3,9 @@
 ## 📌 Overview
 The **Employee Feedback Management System** is a web application that allows employees to submit feedback about their team leads. It enables submission, and management of feedback within an organization.
 
+##  Screenshots 📸
+![githubimage](https://github.com/user-attachments/assets/8e82e5b0-a605-4ffd-a616-c8083668320e)
+
 ## 🚀 Features
 - Submit feedback with ratings
 - View all feedback records
@@ -14,7 +17,7 @@ The **Employee Feedback Management System** is a web application that allows emp
 ### Frontend:
 - React.js (Vite)
 - Material-UI
- 
+
 
 ### Backend:
 - Ballerina
@@ -23,9 +26,9 @@ The **Employee Feedback Management System** is a web application that allows emp
 
 ## ⚙️ Installation
 ### Clone the repository
- ```bash
+```bash
 git clone https://github.com/Sahasra0108/Employee-Feedback-Management-System.git
-   ```
+```
 2.Navigate to the project directory
 ```bash
 cd Employee-Feedback-Management-System
@@ -34,39 +37,39 @@ cd Employee-Feedback-Management-System
 ### Backend Setup
 1. Install [Ballerina](https://ballerina.io/downloads/)
 2. Configure MySQL database:
-   - Create a database named `teamlead_feedback`
+- Create a database named `teamlead_feedback`
 3. Update database credentials in `feedback.bal`:
-   ```ballerina
-   mysql:Client feedback = check new ("localhost",
-       user = "root",
-       password = "YOUR_PASSWORD",
-       database = "teamlead_feedback",
-       port = 3306
-   );
-   ```
- 4. Run the backend service:
-   ```bash
-   bal run feedback.bal
-   ```
+```ballerina
+mysql:Client feedback = check new ("localhost",
+  user = "root",
+  password = "YOUR_PASSWORD",
+  database = "teamlead_feedback",
+  port = 3306
+);
+```
+4. Run the backend service:
+```bash
+bal run feedback.bal
+```
 
 ### Frontend Setup
 1. Navigate to the frontend directory:
-   ```bash
-   cd front_end
-   ```
+```bash
+cd front_end
+```
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run dev
+```
 
-   ## 🔗 API Endpoints
+## 🔗 API Endpoints
 | Method | Endpoint        | Description |
 |--------|----------------|-------------|
 | GET    | `/feedbacks`    | Retrieve all feedback records |
 | GET    | `/teamLeads`    | Get a list of team leads |
 | POST   | `/submitFeedback` | Submit new feedback |
- 
+
