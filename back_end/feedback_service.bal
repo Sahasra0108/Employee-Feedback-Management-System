@@ -41,12 +41,6 @@ type ErrorDetails record {
     time:Utc timeStamp;
 };
 
-type UserNotFound record {|
-    *http:NotFound;
-    ErrorDetails body;
-
-|};
-
 type NewFeedback record {
     string employeeName;
     @constraint:String {
@@ -125,17 +119,48 @@ service /feedback on new http:Listener(9090) {
 
                     }
                 
+                },
+                "500": {
+                    "examples": {
+                        "application/json": {
+                            "errorResponse": {
+                                "value": {
+                                    "message": "An internal server error occurred.",
+                                    "details": "Error details message here",
+                                    "timeStamp": "2025-02-08T11:44:39.670979100Z"
+
+                                }
+                            }
+                        }
+
+                    }
+                
                 }
 
             }
         }
     }
 
-    resource function get feedbacks() returns FeedBack[]|ErrorDetails|error {
-        stream<FeedBack, sql:Error?> feedbackStream = feedback->query(`SELECT * FROM feedback`);
+    resource function get feedbacks() returns FeedBack[]|http:Response|sql:Error {
+        stream<FeedBack, sql:Error?>|error result = trap feedback->query(`SELECT * FROM feedback`);
 
-        return from FeedBack feedback in feedbackStream
+        if result is error {
+            ErrorDetails errorDetails = {
+                message: "An internal server error occurred.",
+                details: result.message(),
+                timeStamp: time:utcNow()
+            };
+
+            json errorDetailsJson = errorDetails.toJson();
+            http:Response response = new;
+            response.statusCode = 500;
+            response.setJsonPayload(errorDetailsJson);
+            return response;
+        }
+
+        return check from FeedBack feedback in result
             select feedback;
+
     }
 
     @openapi:ResourceInfo {
@@ -159,13 +184,48 @@ service /feedback on new http:Listener(9090) {
                     
                     }
 
+                },
+                "500": {
+                    "examples": {
+                        "application/json": {
+                            "errorResponse": {
+                                "value": {
+                                    "message": "An internal server error occurred.",
+                                    "details": "Error details message here",
+                                    "timeStamp": "2025-02-08T11:44:39.670979100Z"
+                                
+                                }
+                            }
+
+                        }
+                    
+                    }
+
                 }
+
             }
         }
     }
 
-    resource function get teamLeads() returns TeamLead[]|error? {
-        return teamleads.toArray();
+    resource function get teamLeads() returns TeamLead[]|http:Response {
+        TeamLead[]|error result = trap teamleads.toArray();
+
+        if result is error {
+            ErrorDetails errorDetails = {
+                message: "An internal server error occurred.",
+                details: result.message(),
+                timeStamp: time:utcNow()
+            };
+
+            json errorDetailsJson = errorDetails.toJson();
+
+            http:Response response = new;
+            response.statusCode = 500;
+            response.setJsonPayload(errorDetailsJson);
+            return response;
+
+        }
+        return result;
     }
 
     @openapi:ResourceInfo {
@@ -193,9 +253,85 @@ service /feedback on new http:Listener(9090) {
                     }
                 }
             
+            },
+            "response": {
+                "200": {
+                    "examples": {
+                        "application/json": {
+                            "feedback01": {
+                                "value": {
+                                    "message": "feed back submitted"
+                                
+                                }
+                            }
+
+                        }
+                    
+                    }
+                },
+                "500": {
+                    "examples": {
+                        "application/json": {
+                            "errorResponse": {
+                                "value": {
+                                    "message": "An internal server error occurred.",
+                                    "details": "Error details message here",
+                                    "timeStamp": "2025-02-08T11:44:39.670979100Z"
+                                
+                                }
+                            }
+
+                        }
+                    
+                    }
+
+                },
+                "400": {
+                    "examples": {
+                        "application/json": {
+                            "missingTeamLead": {
+                                "value": {
+                                    "timestamp": "2025-02-08T14:52:46.778243Z",
+                                    "status": 400,
+                                    "reason": "Bad Request",
+                                    "message": "payload validation failed: Team lead name is required.",
+                                    "path": "/feedback/submitFeedback",
+                                    "method": "POST"
+                                
+                                }
+                            },
+                            "missingFeedback": {
+                                "value": {
+                                    "timestamp": "2025-02-08T14:52:46.778243Z",
+                                    "status": 400,
+                                    "reason": "Bad Request",
+                                    "message": "payload validation failed: Feedback is required.",
+                                    "path": "/feedback/submitFeedback",
+                                    "method": "POST"
+                                
+                                }
+                            },
+                            "missingRating": {
+                                "value": {
+                                    "timestamp": "2025-02-08T14:52:46.778243Z",
+                                    "status": 400,
+                                    "reason": "Bad Request",
+                                    "message": "payload validation failed: Rating is required.",
+                                    "path": "/feedback/submitFeedback",
+                                    "method": "POST"
+                                
+                                }
+                            }
+
+                        }
+                    
+                    }
+
+                }
+            
             }
 
-         }
+        }
     
     }
 
@@ -225,8 +361,12 @@ service /feedback on new http:Listener(9090) {
         }
 
         http:Response response = new;
-        response.statusCode = 201;
-        response.setTextPayload("Feedback submitted successfully!");
+        response.statusCode = 200;
+        json payload = {
+            "message": "feed back submitted successfully"
+        };
+        response.setJsonPayload(payload);
+
         return response;
     }
 
