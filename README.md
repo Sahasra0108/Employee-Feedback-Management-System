@@ -10,9 +10,7 @@ The **Employee Feedback Management System** is a web application that allows emp
 ## 🚀 Features
 - Submit feedback with ratings
 - View all feedback records
-- Role-based access control
-- User authentication and authorization
-- Responsive UI with Material-UI
+ 
 
 ## 🛠️ Tech Stack
 ### Frontend:
