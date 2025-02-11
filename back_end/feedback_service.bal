@@ -5,6 +5,8 @@ import ballerina/sql;
 import ballerina/time;
 import ballerinax/mysql;
 import ballerinax/mysql.driver as _;
+ 
+
 
 type TeamLead record {
     readonly int id;
@@ -71,11 +73,11 @@ type NewFeedback record {
 
 };
 
-mysql:Client feedback = check new ("localhost",
-    user = "root",
+mysql:Client feedback = check new ("mysql-cb3b87a8-40b0-4a35-85c1-1f8f238c1c69-feedback2857689159-c.b.aivencloud.com",
+    user = "avnadmin",
     password = "Sahasra2001!",
-    database = "teamlead_feedback",
-    port = 3306
+    database = "defaultdb",
+    port = 25868
 );
 
 @http:ServiceConfig {
@@ -164,7 +166,7 @@ service /feedback on new http:Listener(9090) {
     }
 
     @openapi:ResourceInfo {
-        operationId: "retriveAllFeedbacks",
+        operationId: "retriveAllTeamleads",
         summary: "API for retrive all feedbacks in the database",
         tags: ["feedbacks"],
         examples: {
