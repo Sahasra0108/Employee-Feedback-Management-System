@@ -5,6 +5,9 @@ import ballerina/sql;
 import ballerina/time;
 import ballerinax/mysql;
 import ballerinax/mysql.driver as _;
+import ballerina/os;
+
+
  
 
 
@@ -73,11 +76,17 @@ type NewFeedback record {
 
 };
 
-mysql:Client feedback = check new ("mysql-cb3b87a8-40b0-4a35-85c1-1f8f238c1c69-feedback2857689159-c.b.aivencloud.com",
-    user = "avnadmin",
-    password = "Sahasra2001!",
-    database = "defaultdb",
-    port = 25868
+string db_user = os:getEnv("DB_USER");
+string db_password = os:getEnv("DB_PASSWORD");
+string db_host = os:getEnv("DB_HOST");
+string db_port = os:getEnv("DB_PORT");
+string db_name = os:getEnv("DB_NAME");
+
+mysql:Client feedback = check new (db_host,
+    user =  db_user,
+    password =  db_password,
+    database = db_name,
+    port = check int:fromString(db_port)
 );
 
 @http:ServiceConfig {
@@ -365,7 +374,7 @@ service /feedback on new http:Listener(9090) {
         http:Response response = new;
         response.statusCode = 200;
         json payload = {
-            "message": "feed back submitted successfully"
+            message: "feed back submitted successfully"
         };
         response.setJsonPayload(payload);
 
